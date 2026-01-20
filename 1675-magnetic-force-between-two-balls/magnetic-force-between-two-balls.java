@@ -1,31 +1,28 @@
 class Solution {
-    public boolean canWePlace(int m, int diff, int[] pos){
+    public int countBalls(int[] pos, int dist){
+        int prev = pos[0];
         int count = 1;
-        int start = pos[0];
-        for(int i = 1; i < pos.length; i++){
-            if(pos[i] - start >= diff){
+        int ind = 1;
+        while(ind < pos.length){
+            if(pos[ind] - prev >= dist){
+                prev = pos[ind];
                 count++;
-                start = pos[i];
             }
+            ind++;
         }
-        return count >= m;
+        return count;
     }
     public int maxDistance(int[] pos, int m) {
         Arrays.sort(pos);
-        int min = pos[0];
-        int max = pos[pos.length - 1];
-        int mid, start = 0, end = max, res = 0;
-        while(start < end){
-            mid = start + (end - start)/2;
-            if(canWePlace(m, mid, pos)){
-                start = mid + 1;
+        int start = 0, end = pos[pos.length - 1];
+        int res = -1;
+        while(start <= end){
+            int mid = start + (end - start)/2;
+            if(countBalls(pos, mid) >= m){
+                start = mid+1;
                 res = Math.max(res, mid);
-            }
-            else{
-                end = mid;
-            }
-        //    System.out.println(start+ " " + end +" "+mid);
+            } else end = mid - 1;
         }
-        return res;   
+        return res;
     }
 }
